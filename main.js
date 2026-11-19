@@ -50,6 +50,7 @@
     rapid: '#ffe14d',
     spread: '#4dff88',
     shield: '#4dd2ff',
+    slow: '#b06bff',
     hpFull: '#7bd88a',
     hpEmpty: 'rgba(255,255,255,0.18)'
   };
@@ -248,7 +249,7 @@
   }
 
   function spawnPickup(x, y) {
-    const type = pick(['rapid', 'spread', 'shield']);
+    const type = pick(['rapid', 'spread', 'shield', 'slow']);   // v0.0.2 — added 'slow'
     pickups.push({ x, y, type, radius: PICKUP_RADIUS, rot: 0, life: PICKUP_LIFE });
   }
 
@@ -305,6 +306,7 @@
 
   function activatePickup(type) {
     activePickup = { type: type, time: PICKUP_DURATION, consumed: false };
+    if (window.MUX) MUX.bump();
   }
 
   function damagePlayer() {
@@ -330,45 +332,47 @@
   // Enemy update
   // =====================================================================
   function updateEnemy(e, dt) {
+    // v0.0.2 — time-slow pickup: enemies move and fire at 40% speed
+    const edt = (activePickup && activePickup.type === 'slow') ? dt * 0.4 : dt;
     const toPlayerX = player.x - e.x;
     const toPlayerY = player.y - e.y;
     const dPlayer = Math.hypot(toPlayerX, toPlayerY) || 1;
 
     if (e.type === 'walker') {
       // slow curving path: turn gradually, drift generally toward center/player
-      e.heading += e.turn * dt;
+      e.heading += e.turn * edt;
       const desired = Math.atan2(toPlayerY, toPlayerX);
       // bias heading slowly toward player
       let diff = ((desired - e.heading + Math.PI) % TAU + TAU) % TAU - Math.PI;
-      e.heading += clamp(diff, -0.6 * dt, 0.6 * dt);
-      e.x += Math.cos(e.heading) * e.speed * dt;
-      e.y += Math.sin(e.heading) * e.speed * dt;
+      e.heading += clamp(diff, -0.6 * edt, 0.6 * edt);
+      e.x += Math.cos(e.heading) * e.speed * edt;
+      e.y += Math.sin(e.heading) * e.speed * edt;
     } else if (e.type === 'sprinter') {
       e.heading = Math.atan2(toPlayerY, toPlayerX);
-      e.x += Math.cos(e.heading) * e.speed * dt;
-      e.y += Math.sin(e.heading) * e.speed * dt;
+      e.x += Math.cos(e.heading) * e.speed * edt;
+      e.y += Math.sin(e.heading) * e.speed * edt;
     } else if (e.type === 'tank') {
       e.heading = Math.atan2(toPlayerY, toPlayerX);
       // stop approaching once within firing range
       if (dPlayer > 230) {
-        e.x += Math.cos(e.heading) * e.speed * dt;
-        e.y += Math.sin(e.heading) * e.speed * dt;
+        e.x += Math.cos(e.heading) * e.speed * edt;
+        e.y += Math.sin(e.heading) * e.speed * edt;
       }
-      e.fireTimer -= dt;
+      e.fireTimer -= edt;
       if (e.fireTimer <= 0 && dPlayer < 460) {
         e.fireTimer = e.fireInterval;
         fireEnemyBullet(e.x, e.y, Math.atan2(toPlayerY, toPlayerX), ebulletSpeed());
       }
     } else if (e.type === 'boss') {
       // drift horizontally within an upper band, bob vertically
-      e.heading += dt * 0.8;
+      e.heading += edt * 0.8;
       const targetY = 110 + Math.sin(e.heading) * 30;
-      e.y += (targetY - e.y) * 0.8 * dt;
-      e.x += Math.cos(e.heading * 0.5) * e.speed * dt;
+      e.y += (targetY - e.y) * 0.8 * edt;
+      e.x += Math.cos(e.heading * 0.5) * e.speed * edt;
       // keep boss on screen horizontally
       if (e.x < e.radius + 10) e.x = e.radius + 10;
       if (e.x > ARENA_W - e.radius - 10) e.x = ARENA_W - e.radius - 10;
-      e.fireTimer -= dt;
+      e.fireTimer -= edt;
       if (e.fireTimer <= 0) {
         e.fireTimer = e.fireInterval;
         e.burstPhase = (e.burstPhase + 1) % 2;
@@ -890,7 +894,7 @@
     // base disc
     ctx.fillStyle = 'rgba(10,20,14,0.55)';
     ctx.strokeStyle = p.type === 'rapid' ? COLORS.rapid
-      : p.type === 'spread' ? COLORS.spread : COLORS.shield;
+      : p.type === 'spread' ? COLORS.spread : p.type === 'slow' ? COLORS.slow : COLORS.shield;
     ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.arc(0, 0, p.radius, 0, TAU);
@@ -899,7 +903,7 @@
     ctx.rotate(p.rot);
     ctx.lineWidth = 2;
     ctx.strokeStyle = p.type === 'rapid' ? COLORS.rapid
-      : p.type === 'spread' ? COLORS.spread : COLORS.shield;
+      : p.type === 'spread' ? COLORS.spread : p.type === 'slow' ? COLORS.slow : COLORS.shield;
     ctx.fillStyle = ctx.strokeStyle;
     if (p.type === 'rapid') {
       // lightning bolt
@@ -918,6 +922,13 @@
       ctx.moveTo(0, 0); ctx.lineTo(7, -7);
       ctx.moveTo(0, 0); ctx.lineTo(8, 0);
       ctx.moveTo(0, 0); ctx.lineTo(7, 7);
+      ctx.stroke();
+    } else if (p.type === 'slow') {
+      // clock (time-slow) — v0.0.2
+      ctx.beginPath();
+      ctx.arc(0, 0, 6, 0, TAU);
+      ctx.moveTo(0, 0); ctx.lineTo(0, -3);
+      ctx.moveTo(0, 0); ctx.lineTo(4, 1);
       ctx.stroke();
     } else {
       // ring
@@ -943,6 +954,7 @@
     if (activePickup) {
       const label = activePickup.type === 'rapid' ? 'RAPID FIRE'
         : activePickup.type === 'spread' ? 'SPREAD SHOT'
+        : activePickup.type === 'slow' ? 'TIME SLOW'
         : (activePickup.consumed ? '' : 'SHIELD');
       elPickupLabel.textContent = label;
       const frac = clamp(activePickup.time / PICKUP_DURATION, 0, 1);
@@ -951,9 +963,12 @@
         ? 'linear-gradient(90deg,#ffe14d,#ff9e1a)'
         : activePickup.type === 'spread'
           ? 'linear-gradient(90deg,#4dff88,#18a8c4)'
-          : 'linear-gradient(90deg,#4dd2ff,#29e6ff)';
+          : activePickup.type === 'slow'
+            ? 'linear-gradient(90deg,#b06bff,#6a3aff)'
+            : 'linear-gradient(90deg,#4dd2ff,#29e6ff)';
       elPickupLabel.style.color = activePickup.type === 'rapid' ? '#ffe14d'
-        : activePickup.type === 'spread' ? '#4dff88' : '#4dd2ff';
+        : activePickup.type === 'spread' ? '#4dff88'
+        : activePickup.type === 'slow' ? '#b06bff' : '#4dd2ff';
       elPickupBox.classList.add('show');
     } else {
       elPickupBox.classList.remove('show');
@@ -1021,6 +1036,7 @@
   function gameOver() {
     player.alive = false;
     mode = 'over';
+    if (window.MUX) MUX.over();
     if (score > best) {
       best = score;
       try { localStorage.setItem(BEST_KEY, String(best)); } catch (e) {}

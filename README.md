@@ -2,10 +2,18 @@
 
 > یک شوتر top-down wave-survival با ۴ نوع دشمن، pickupها، و باس هر ۱۰ موج — PWA با Vanilla JS.
 
-[![Version](https://img.shields.io/badge/version-v0.0.1-blue)](https://github.com/andrbi107/arena-blaster/releases/tag/v0.0.1) [![PWA](https://img.shields.io/badge/PWA-installable-purple)](https://andrbi107.github.io/arena-blaster/) [![No deps](https://img.shields.io/badge/dependencies-none-success)](https://github.com/andrbi107/arena-blaster) [![License](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
+[![Version](https://img.shields.io/badge/version-v0.0.2-blue)](https://github.com/andrbi107/arena-blaster/releases/tag/v0.0.2) [![PWA](https://img.shields.io/badge/PWA-installable-purple)](https://andrbi107.github.io/arena-blaster/) [![No deps](https://img.shields.io/badge/dependencies-none-success)](https://github.com/andrbi107/arena-blaster) [![License](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
 
 🎮 **[بازی کن](https://andrbi107.github.io/arena-blaster/)** — نسخه‌ی آنلاین روی GitHub Pages
-📦 **[مخزن گیت‌هاب](https://github.com/andrbi107/arena-blaster)** · 🏷️ **[Release v0.0.1](https://github.com/andrbi107/arena-blaster/releases/tag/v0.0.1)**
+📦 **[مخزن گیت‌هاب](https://github.com/andrbi107/arena-blaster)** · 🏷️ **[Release v0.0.2](https://github.com/andrbi107/arena-blaster/releases/tag/v0.0.2)**
+
+---
+
+## تغییرات v0.0.2 (جدید)
+
+**Arena Blaster** — time-slow pickup: ۴مین pickup (آیکون ساعت، بنفش) که دشمنان و شلیک آن‌ها را برای ۸s به ۴۰٪ کند می‌کند. haptic روی pickup/game-over.
+
+**همه‌ی بازی‌ها** — `mobile-ux.js` مشترک (haptics/install prompt/version stamp) + cache sw.js به v2.
 
 ---
 
