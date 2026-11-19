@@ -1,0 +1,15 @@
+{
+  "name": "Arena Blaster",
+  "short_name": "Arena Blaster",
+  "description": "A top-down wave-survival arena shooter. Rotate your ship, blast escalating waves of walkers, sprinters, tanks and bosses, grab power-ups, and survive.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#0c130d",
+  "theme_color": "#0c130d",
+  "categories": ["games", "entertainment"],
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

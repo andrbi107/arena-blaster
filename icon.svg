@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Arena Blaster icon">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="42%" r="70%">
+      <stop offset="0%" stop-color="#16221a"/>
+      <stop offset="100%" stop-color="#0a0f0b"/>
+    </radialGradient>
+  </defs>
+  <rect width="512" height="512" fill="url(#bg)"/>
+  <g stroke="#2c3d2e" stroke-width="1.5" opacity="0.55">
+    <path d="M0 128H512M0 256H512M0 384H512M128 0V512M256 0V512M384 0V512"/>
+  </g>
+  <g transform="translate(256 268)">
+    <polygon points="0,-92 74,72 -74,72" fill="#29e6ff" stroke="#073038" stroke-width="10" stroke-linejoin="round"/>
+    <polygon points="0,-92 74,72 0,40" fill="#aef6ff" opacity="0.35"/>
+    <rect x="-9" y="-128" width="18" height="58" rx="4" fill="#073038"/>
+    <circle cx="0" cy="-128" r="11" fill="#ffe14d"/>
+    <circle cx="0" cy="34" r="10" fill="#0a3a44"/>
+  </g>
+  <g fill="#ff7a1a" opacity="0.9">
+    <polygon points="96,408 120,440 72,440"/>
+  </g>
+  <g fill="#e0364c" opacity="0.9">
+    <rect x="392" y="402" width="34" height="34" rx="3"/>
+  </g>
+  <g fill="#9b59ff" opacity="0.85">
+    <polygon points="430,150 462,168 462,196 430,214 398,196 398,168"/>
+  </g>
+</svg>

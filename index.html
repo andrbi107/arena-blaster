@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0c130d">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Arena Blaster">
+<meta name="screen-orientation" content="landscape">
+<meta name="orientation" content="landscape">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg">
+<title>Arena Blaster</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="stage">
+    <canvas id="game" width="960" height="600" aria-label="Arena Blaster game canvas"></canvas>
+
+    <!-- Boss HP bar (top edge, only during boss waves) -->
+    <div id="bossBar" class="boss-bar" aria-hidden="true">
+      <div class="boss-bar-label">BOSS</div>
+      <div class="boss-bar-track"><div id="bossBarFill" class="boss-bar-fill"></div></div>
+    </div>
+
+    <!-- Top HUD -->
+    <div id="hud" class="hud" aria-hidden="true">
+      <div class="hud-left">
+        <span class="hud-label">SCORE</span>
+        <span id="scoreVal" class="hud-value">0</span>
+      </div>
+      <div class="hud-center">
+        <span id="waveVal" class="hud-wave">WAVE 1</span>
+        <div id="pickupBox" class="pickup-box" aria-hidden="true">
+          <span id="pickupLabel" class="pickup-label">RAPID FIRE</span>
+          <div class="pickup-bar"><div id="pickupFill" class="pickup-fill"></div></div>
+        </div>
+      </div>
+      <div class="hud-right">
+        <span id="livesIcons" class="lives-icons" aria-label="Lives"></span>
+        <button id="pauseBtn" class="icon-btn" type="button" aria-label="Pause game">&#10073;&#10073;</button>
+      </div>
+    </div>
+
+    <!-- Start screen -->
+    <div id="startScreen" class="screen active">
+      <h1 class="title">ARENA BLASTER</h1>
+      <p class="tagline">TACTICAL WAVE-SURVIVAL SHOOTER</p>
+      <div class="best-line">BEST <span id="startBest">0</span></div>
+      <button id="playBtn" class="primary-btn" type="button">PLAY</button>
+      <p class="hint">
+        Mouse: aim + hold to fire &middot; WASD: move &middot; Arrows: turn ship &middot; Space: fire<br>
+        Touch: drag to move, auto-fire at the nearest enemy
+      </p>
+    </div>
+
+    <!-- Pause screen -->
+    <div id="pauseScreen" class="screen">
+      <h2 class="title sm">PAUSED</h2>
+      <button id="resumeBtn" class="primary-btn" type="button">RESUME</button>
+      <button id="quitBtn" class="ghost-btn" type="button">QUIT TO MENU</button>
+    </div>
+
+    <!-- Game over screen -->
+    <div id="overScreen" class="screen">
+      <h2 class="title sm">GAME OVER</h2>
+      <div class="result-grid">
+        <div class="result-cell"><span class="result-label">SCORE</span><span id="finalScore" class="result-value">0</span></div>
+        <div class="result-cell"><span class="result-label">WAVE</span><span id="finalWave" class="result-value">1</span></div>
+        <div class="result-cell"><span class="result-label">BEST</span><span id="finalBest" class="result-value">0</span></div>
+      </div>
+      <div class="btn-row">
+        <button id="retryBtn" class="primary-btn" type="button">RETRY</button>
+        <button id="homeBtn" class="ghost-btn" type="button">HOME</button>
+      </div>
+    </div>
+
+    <!-- Portrait rotate hint -->
+    <div id="rotateHint" class="rotate-hint">
+      <div class="rotate-icon">&#8635;</div>
+      <p>Rotate your device to play</p>
+    </div>
+  </div>
+
+  <script src="main.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('sw.js').catch(function () {});
+      });
+    }
+  </script>
+</body>
+</html>
