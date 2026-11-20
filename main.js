@@ -1210,8 +1210,11 @@
   showStart();
   requestAnimationFrame(loop);
 })();
-// ---- v0.0.4 gamekit wiring ----
+// ---- v0.0.5 gamekit wiring (splash + menu + stats + leaderboard + auto-update) ----
 if (window.GK) {
+  GK.boot({ title: "Arena Blaster", tagline: "Tactical wave survival", theme: "#0c130d" });
   GK.help({ title: "Arena Blaster", objective: "Survive tactical waves. A boss arrives every 10th wave. Grab pickups.", controls: ["Mouse: aim + hold to fire","WASD: move","Arrows: turn ship","Space: fire","Touch: drag to move, auto-fire","P: pause","F: fullscreen"], tips: "Pickups: rapid / spread / slow." });
   GK.exposeState(function () { try { return { score: (window.S && window.S.score) || window.score || 0, mode: (window.S && window.S.mode) || 'play', wave: (window.S && window.S.wave) || 0 }; } catch (e) { return {}; } });
+  GK._manualRecord = false;
+  setTimeout(function () { GK.ready(); }, 600);
 }
