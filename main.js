@@ -542,7 +542,9 @@
 
     // ----- firing -----
     player.fireCd -= dt;
-    const wantFire = mouse.down || !!keys[' '] || !!keys['Space'] || touchMode;
+    // v0.0.3 — auto-fire whenever enemies are present (no need to hold mouse/tap).
+    // Manual fire (hold mouse / Space / touch) still works as a bonus.
+    const wantFire = mouse.down || !!keys[' '] || !!keys['Space'] || touchMode || (enemies.length > 0);
     if (wantFire && player.fireCd <= 0) {
       firePlayer();
     }

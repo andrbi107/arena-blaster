@@ -1,6 +1,6 @@
 // Arena Blaster - service worker
 // Precaches the full app shell so the game loads and plays fully offline.
-const CACHE = 'arena-blaster-v2';
+const CACHE = 'arena-blaster-v3';
 const ASSETS = [
   './',
   './index.html', './mobile-ux.js',
